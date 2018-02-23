@@ -1,4 +1,4 @@
-package com.shadley000.usermanagerclient;
+package com.shadley000.userManagerClient;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -10,12 +10,11 @@ import java.net.URL;
 import java.util.HashSet;
 import java.util.Set;
 import org.json.JSONArray;
-import org.json.JSONObject;
 
 
 public class UserManagerClient {
 
-     String baseUrl;
+    String baseUrl;
 
     public UserManagerClient(String serverUrl) {
         this.baseUrl = serverUrl;
@@ -51,11 +50,7 @@ public class UserManagerClient {
         for(int i=0;i<json.length();i++)
         {   Integer permissionId = json.getInt(i);
             permissionSet.add(permissionId);
-            //System.out.println(permissionId);
         }
-         //System.out.println(permissionSet.toString());
-       
-       
         return permissionSet;
     }
 
