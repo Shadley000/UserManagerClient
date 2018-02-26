@@ -3,9 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.shadley000.userManagerClient;
+package com.shadley000.TokenClient;
 
 import com.shadley000.restClient.RestClient;
+import com.shadley000.restClient.NoConnectionException;
+import com.shadley000.restClient.NotFoundException;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
