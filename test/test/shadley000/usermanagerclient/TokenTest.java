@@ -32,7 +32,7 @@ public class TokenTest {
         Long token;
         try {
             token = tokenClient.getToken(login, password);
-            if (token == null) {
+            if (token != null) {
                 System.out.println("Token recieved:" + token);
                 long userId = tokenClient.getUserId(token);
                 System.out.println("userId recieved:" + userId);
