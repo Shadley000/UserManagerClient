@@ -5,8 +5,6 @@
  */
 package com.shadley000.userManagerClient.beans;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import org.json.JSONObject;
 
 /**
@@ -14,30 +12,25 @@ import org.json.JSONObject;
  * @author shadl
  */
 public class Application {
-      long applicationId;
+
+    long applicationId;
     String name;
     String description;
 
     public Application() {
     }
-    
-     public Application(JSONObject json) {
-         applicationId = json.getLong("applicationId");
-         name = json.getString("name");
-         description = json.getString("description");
-         
+
+    public Application(JSONObject json) {
+        applicationId = json.getLong("applicationId");
+        name = json.getString("name");
+        description = json.getString("description");
+
     }
 
     public Application(long applicationId, String name, String description) {
         this.applicationId = applicationId;
         this.name = name;
         this.description = description;
-    }
-    
-     public Application(ResultSet rs) throws SQLException {
-        this.applicationId = rs.getLong("application_id");
-        this.name = rs.getString("nname");
-        this.description = rs.getString("description");
     }
 
     public long getApplicationId() {
@@ -63,5 +56,5 @@ public class Application {
     public void setDescription(String description) {
         this.description = description;
     }
-    
+
 }

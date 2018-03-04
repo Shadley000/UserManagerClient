@@ -34,8 +34,11 @@ public class UsersManagerClient {
         return sb.toString();
     }
 
+    public Application getApplicationByID(Long id) throws NotFoundException, MalformedURLException, IOException {
+        return getApplication(""+id);
+    }
     public Application getApplication(String name) throws NotFoundException, MalformedURLException, IOException {
-        URL url = new URL(baseUrl + "applications/name/" + name + "?token=" + token);
+        URL url = new URL(baseUrl + "applications/" + name + "?token=" + token);
         System.out.println(url);
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
         conn.setRequestMethod("GET");
@@ -53,7 +56,7 @@ public class UsersManagerClient {
         return new Application(json);
     }
 
-    public List<Role> getRolesByUser(long applicationId, long userId) throws NotFoundException, MalformedURLException, IOException {
+    public List<Role> getRolesByUser(long applicationId, long userId) throws NotFoundException, MalformedURLException, IOException {               
         URL url = new URL(baseUrl + "/" + userId + "/applications/" + applicationId + "/role?token=" + token);
         System.out.println(url);
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();

@@ -5,8 +5,6 @@
  */
 package com.shadley000.userManagerClient.beans;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import org.json.JSONObject;
 
 /**
@@ -14,6 +12,7 @@ import org.json.JSONObject;
  * @author shadl
  */
 public class Users {
+
     long usersId;
     String login;
     String password;
@@ -24,27 +23,17 @@ public class Users {
 
     public Users() {
     }
-    
+
     public Users(JSONObject json) {
-         this.usersId = json.getLong("usersId");
+        this.usersId = json.getLong("usersId");
         this.login = json.getString("login");
-        this.password = json.getString("password");
-        this.firstName = json.getString("firstName");
-        this.lastName = json.getString("lastName");
+        this.password = json.getString("user_password");
+        this.firstName = json.getString("first_name");
+        this.lastName = json.getString("last_name");
         this.email = json.getString("email");
         this.confirmed = json.getBoolean("confirmed");
     }
 
-    public Users(ResultSet rs) throws SQLException {
-        this.usersId = rs.getLong("users_id");
-        this.login = rs.getString("login");
-        this.password = rs.getString("password");
-        this.firstName = rs.getString("firstName");
-        this.lastName = rs.getString("lastName");
-        this.email = rs.getString("email");
-        this.confirmed = rs.getBoolean("confirmed");
-        
-    }
     public Users(long usersId, String login, String password, String firstName, String lastName, String email, boolean confirmed) {
         this.usersId = usersId;
         this.login = login;
@@ -110,6 +99,5 @@ public class Users {
     public void setConfirmed(boolean confirmed) {
         this.confirmed = confirmed;
     }
-    
-    
+
 }

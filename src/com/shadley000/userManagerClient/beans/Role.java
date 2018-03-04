@@ -5,8 +5,6 @@
  */
 package com.shadley000.userManagerClient.beans;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import org.json.JSONObject;
 
 /**
@@ -14,6 +12,7 @@ import org.json.JSONObject;
  * @author shadl
  */
 public class Role {
+
     long roleId;
     long applicationId;
     String roleTypeName;
@@ -30,16 +29,7 @@ public class Role {
         this.name = json.getString("name");
         this.ud1 = json.getString("ud1");
     }
-    
-     public Role(ResultSet rs) throws SQLException {
-        this.roleId = rs.getLong("role_id");
-        this.applicationId = rs.getLong("application_id");
-        this.roleTypeName = rs.getString("role_type_name");
-        this.name = rs.getString("nname");
-        this.ud1 = rs.getString("ud1");
-        
-        
-    }
+
     public Role(long roleId, long applicationId, String roleTypeName, String name, String ud1) {
         this.roleId = roleId;
         this.applicationId = applicationId;
@@ -87,6 +77,5 @@ public class Role {
     public void setUd1(String ud1) {
         this.ud1 = ud1;
     }
-    
-    
+
 }
