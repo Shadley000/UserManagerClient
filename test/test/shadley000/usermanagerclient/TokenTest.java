@@ -19,18 +19,27 @@ public class TokenTest {
 
     public static void main(String[] args) {
 
-        String serverURL = "http://localhost:51931/UserManager/webapi/token";
-        String login = "shadley000";
-        String password = "password1";
+        if (args.length != 3) {
+            System.out.println("USAGE: test.shadley000.usermanagerclient DBUrl user password");
+            return;
+        }
+        String serverURL = args[0];
+        String login = args[1];
+        String password = args[2];
 
         TokenClient tokenClient = new TokenClient(serverURL);
 
-        long token;
+        Long token;
         try {
             token = tokenClient.getToken(login, password);
-            System.out.println("Token recieved:" + token);
-            long userId = tokenClient.getUserId(token);
-            System.out.println("userId recieved:" + userId);
+            if (token == null) {
+                System.out.println("Token recieved:" + token);
+                long userId = tokenClient.getUserId(token);
+                System.out.println("userId recieved:" + userId);
+            } else {
+                System.out.println("Unable to aquire token for " + login);
+            }
+
         } catch (NoConnectionException ex) {
             Logger.getLogger(TokenTest.class.getName()).log(Level.SEVERE, null, ex);
         } catch (NotFoundException ex) {

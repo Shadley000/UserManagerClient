@@ -15,31 +15,46 @@ public class UsersManagerClientTest {
 
     public static void main(String[] args) {
 
-        try {
-            TokenClient tokenClient = new TokenClient("http://localhost:51931/UserManager/webapi/token");
+        if (args.length != 3) {
+            System.out.println("USAGE: test.shadley000.usermanagerclient webserverURL user password");
+            return;
+        }
+        String serverURL = args[0];
+        String login = args[1];
+        String password = args[2];
+        
+        TokenClient tokenClient = new TokenClient(serverURL+"/UserManager/webapi/token");
 
+        Long token;
+        try {
+            token = tokenClient.getToken(login, password);
+            if (token != null) {
+                System.out.println("Token recieved:" + token);
+                long userId = tokenClient.getUserId(token);
+                System.out.println("userId recieved:" + userId);
+            } else {
+                System.out.println("Unable to aquire token for " + login);
+            }
+     
             // simulate login from the browser
-            Long token = null; {
-                token = tokenClient.getToken("shadley000", "password1");
+            {
+                token = tokenClient.getToken(login, password);
                 System.out.println("Token recieved:" + token);
                 long userId = tokenClient.getUserId(token);
                 System.out.println("userId recieved:" + userId);
             }
 
             // simulate a request from installations server
-            if (token != null) {
+            {
                 long userId = tokenClient.getUserId(token);
-                UsersManagerClient client = new UsersManagerClient("http://localhost:51931/UserManager/webapi/users", token);
+                UsersManagerClient client = new UsersManagerClient(serverURL+"/UserManager/webapi/users", token);
 
                 Application application = client.getApplication("A6 Alarm Manager");
                 List<Role> rolelist = client.getRolesByUser(application.getApplicationId(), userId);
             
                 //i now have my userID, token, role
-
             }
-        } catch (NoConnectionException ex) {
-            Logger.getLogger(TokenTest.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (NotFoundException ex) {
+        } catch (NoConnectionException | NotFoundException ex) {
             Logger.getLogger(TokenTest.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
             Logger.getLogger(UsersManagerClientTest.class.getName()).log(Level.SEVERE, null, ex);
