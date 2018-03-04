@@ -13,8 +13,8 @@ import org.json.JSONObject;
  */
 public class Role {
 
-    long roleId;
-    long applicationId;
+    String roleId;
+    String applicationId;
     String roleTypeName;
     String name;
     String ud1;
@@ -23,14 +23,14 @@ public class Role {
     }
 
     public Role(JSONObject json) {
-        this.roleId = json.getLong("roleId");
-        this.applicationId = json.getLong("applicationId");
+        this.roleId = json.getString("roleId");
+        this.applicationId = json.getString("applicationId");
         this.roleTypeName = json.getString("roleTypeName");
         this.name = json.getString("name");
         this.ud1 = json.getString("ud1");
     }
 
-    public Role(long roleId, long applicationId, String roleTypeName, String name, String ud1) {
+    public Role(String roleId, String applicationId, String roleTypeName, String name, String ud1) {
         this.roleId = roleId;
         this.applicationId = applicationId;
         this.roleTypeName = roleTypeName;
@@ -38,19 +38,19 @@ public class Role {
         this.ud1 = ud1;
     }
 
-    public long getRoleId() {
+    public String getRoleId() {
         return roleId;
     }
 
-    public void setRoleId(long roleId) {
+    public void setRoleId(String roleId) {
         this.roleId = roleId;
     }
 
-    public long getApplicationId() {
+    public String getApplicationId() {
         return applicationId;
     }
 
-    public void setApplicationId(long applicationId) {
+    public void setApplicationId(String applicationId) {
         this.applicationId = applicationId;
     }
 

@@ -5,9 +5,9 @@
  */
 package test.shadley000.usermanagerclient;
 
-import com.shadley000.restClient.NoConnectionException;
-import com.shadley000.restClient.NotFoundException;
+
 import com.shadley000.TokenClient.TokenClient;
+import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -29,20 +29,18 @@ public class TokenTest {
 
         TokenClient tokenClient = new TokenClient(serverURL);
 
-        Long token;
+        String token;
         try {
             token = tokenClient.getToken(login, password);
             if (token != null) {
                 System.out.println("Token recieved:" + token);
-                long userId = tokenClient.getUserId(token);
+                String userId = tokenClient.getUserId(token);
                 System.out.println("userId recieved:" + userId);
             } else {
                 System.out.println("Unable to aquire token for " + login);
             }
 
-        } catch (NoConnectionException ex) {
-            Logger.getLogger(TokenTest.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (NotFoundException ex) {
+        } catch (IOException ex) {
             Logger.getLogger(TokenTest.class.getName()).log(Level.SEVERE, null, ex);
         }
 

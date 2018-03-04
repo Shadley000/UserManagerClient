@@ -13,7 +13,7 @@ import org.json.JSONObject;
  */
 public class Application {
 
-    long applicationId;
+    String applicationId;
     String name;
     String description;
 
@@ -21,23 +21,23 @@ public class Application {
     }
 
     public Application(JSONObject json) {
-        applicationId = json.getLong("applicationId");
+        applicationId = json.getString("applicationId");
         name = json.getString("name");
         description = json.getString("description");
 
     }
 
-    public Application(long applicationId, String name, String description) {
+    public Application(String applicationId, String name, String description) {
         this.applicationId = applicationId;
         this.name = name;
         this.description = description;
     }
 
-    public long getApplicationId() {
+    public String getApplicationId() {
         return applicationId;
     }
 
-    public void setApplicationId(long applicationId) {
+    public void setApplicationId(String applicationId) {
         this.applicationId = applicationId;
     }
 

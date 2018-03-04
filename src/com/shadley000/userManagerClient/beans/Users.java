@@ -13,7 +13,7 @@ import org.json.JSONObject;
  */
 public class Users {
 
-    long usersId;
+    String usersId;
     String login;
     String password;
     String firstName;
@@ -25,7 +25,7 @@ public class Users {
     }
 
     public Users(JSONObject json) {
-        this.usersId = json.getLong("usersId");
+        this.usersId = json.getString("usersId");
         this.login = json.getString("login");
         this.password = json.getString("user_password");
         this.firstName = json.getString("first_name");
@@ -34,7 +34,7 @@ public class Users {
         this.confirmed = json.getBoolean("confirmed");
     }
 
-    public Users(long usersId, String login, String password, String firstName, String lastName, String email, boolean confirmed) {
+    public Users(String usersId, String login, String password, String firstName, String lastName, String email, boolean confirmed) {
         this.usersId = usersId;
         this.login = login;
         this.password = password;
@@ -44,11 +44,11 @@ public class Users {
         this.confirmed = confirmed;
     }
 
-    public long getUsersId() {
+    public String getUsersId() {
         return usersId;
     }
 
-    public void setUsersId(long usersId) {
+    public void setUsersId(String usersId) {
         this.usersId = usersId;
     }
 

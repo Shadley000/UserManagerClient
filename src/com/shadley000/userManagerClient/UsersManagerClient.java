@@ -1,6 +1,5 @@
 package com.shadley000.userManagerClient;
 
-import com.shadley000.restClient.NotFoundException;
 import com.shadley000.userManagerClient.beans.Application;
 import com.shadley000.userManagerClient.beans.Role;
 import java.io.BufferedReader;
@@ -17,10 +16,13 @@ import org.json.JSONObject;
 
 public class UsersManagerClient {
 
+    String applicationName;
+    String applicationId;
     String baseUrl;
-    long token;
+    String token;
 
-    public UsersManagerClient(String serverUrl, long token) {
+    public UsersManagerClient(String applicationName, String serverUrl, String token) {
+        this.applicationName = applicationName;
         this.baseUrl = serverUrl;
         this.token = token;
     }
@@ -34,10 +36,12 @@ public class UsersManagerClient {
         return sb.toString();
     }
 
-    public Application getApplicationByID(Long id) throws NotFoundException, MalformedURLException, IOException {
-        return getApplication(""+id);
+    public void init() throws IOException
+    {
+        applicationId = getApplication(applicationName).getApplicationId();
     }
-    public Application getApplication(String name) throws NotFoundException, MalformedURLException, IOException {
+    
+    protected Application getApplication(String name) throws  MalformedURLException, IOException {
         URL url = new URL(baseUrl + "applications/" + name + "?token=" + token);
         System.out.println(url);
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
@@ -56,7 +60,7 @@ public class UsersManagerClient {
         return new Application(json);
     }
 
-    public List<Role> getRolesByUser(long applicationId, long userId) throws NotFoundException, MalformedURLException, IOException {               
+    public List<Role> getRolesByUser(String userId) throws MalformedURLException, IOException {               
         URL url = new URL(baseUrl + "/" + userId + "/applications/" + applicationId + "/role?token=" + token);
         System.out.println(url);
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
