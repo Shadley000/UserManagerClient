@@ -29,7 +29,7 @@ public class UsersManagerClientTest {
             String user = args[1];
             String password = args[2];
             client = new UsersManagerClient(url, user, password);
-            
+
             try {
                 client.init();
             } catch (IOException ex) {
@@ -39,7 +39,7 @@ public class UsersManagerClientTest {
 
         }
         try {
-            
+
             String testUser = "guest";
             String testPassword = "password";
 
