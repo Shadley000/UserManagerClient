@@ -18,70 +18,83 @@ public class UsersManagerClient {
 
     String applicationName;
     String applicationId;
-    String baseUrl;
+    String userManagerUrl;
     String token;
+    String user;
+    String password;
 
-    public UsersManagerClient(String applicationName, String serverUrl, String token) {
-        this.applicationName = applicationName;
-        this.baseUrl = serverUrl;
-        this.token = token;
+    public UsersManagerClient(String userManagerUrl, String user, String password) {
+        this.userManagerUrl = userManagerUrl;
+        this.user = user;
+        this.password = password;      
     }
 
-    private String readAll(Reader rd) throws IOException {
-        StringBuilder sb = new StringBuilder();
-        int cp;
-        while ((cp = rd.read()) != -1) {
-            sb.append((char) cp);
-        }
-        return sb.toString();
-    }
-
-    public void init() throws IOException
-    {
-        applicationId = getApplication(applicationName).getApplicationId();
+    public void init() throws IOException {
+        token = getToken(token, password);
+        applicationId = getApplication(user).getApplicationId();
     }
     
-    protected Application getApplication(String name) throws  MalformedURLException, IOException {
-        URL url = new URL(baseUrl + "applications/" + name + "?token=" + token);
-        System.out.println(url);
-        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-        conn.setRequestMethod("GET");
-        conn.setRequestProperty("Accept", "application/json");
-
-        if (conn.getResponseCode() != 200) {
-            throw new IOException("Failed : HTTP error code : " + conn.getResponseCode());
-        }
-
-        String data = readAll(new BufferedReader(new InputStreamReader((conn.getInputStream()))));
-        //System.out.println(data);
-        JSONObject json = new JSONObject(data);
-        conn.disconnect();
-
-        return new Application(json);
+    public String getToken(String login,String password) throws MalformedURLException, IOException 
+    {   return get(new URL(userManagerUrl+"token/users/"+login+"?password="+password));         
+    }
+    
+    public String getUserId(String token) throws MalformedURLException, IOException 
+    {   return get(new URL(userManagerUrl+"token/userIDs/" + token));                   
     }
 
-    public List<Role> getRolesByUser(String userId) throws MalformedURLException, IOException {               
-        URL url = new URL(baseUrl + "/" + userId + "/applications/" + applicationId + "/role?token=" + token);
-        System.out.println(url);
-        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-        conn.setRequestMethod("GET");
-        conn.setRequestProperty("Accept", "application/json");
+    public List<Role> getRolesByUser(String userId) throws MalformedURLException, IOException {
+        String urlStr = userManagerUrl + "users/" + userId + "/applications/" + applicationId + "/role?token=";
 
-        if (conn.getResponseCode() != 200) {
-            throw new IOException("Failed : HTTP error code : " + conn.getResponseCode());
-        }
-
-        String data = readAll(new BufferedReader(new InputStreamReader((conn.getInputStream()))));
-        //System.out.println(data);
-        JSONArray json = new JSONArray(data);
-        conn.disconnect();
-
+        JSONArray json = new JSONArray(getWithTokenReset(urlStr));
         List<Role> roleList = new ArrayList<>();
-
         for (int i = 0; i < json.length(); i++) {
             roleList.add(new Role(json.getJSONObject(i)));
         }
         return roleList;
+    }
+
+    private Application getApplication(String name) throws MalformedURLException, IOException {
+        String urlStr = userManagerUrl + "applications/" + name + "?token=";
+        return new Application(new JSONObject(getWithTokenReset(urlStr)));
+    }
+    
+    private String getWithTokenReset(String urlStr) throws MalformedURLException, IOException {
+        URL url = new URL(urlStr + token);
+
+        for (int i = 0; i < 3; i++) {
+            try {
+                return get(url);
+            } catch (IOException e) {
+                token = getToken(token, password);
+                url = new URL(urlStr + token);
+            }
+        }
+        throw new IOException("unable to get data from urlStr after 3 attempts");
+    }
+
+    private String get(URL url) throws MalformedURLException, IOException {
+        System.out.println(url);
+
+        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+        conn.setRequestMethod("GET");
+        conn.setRequestProperty("Accept", "application/json");
+
+        if (conn.getResponseCode() == 200) {
+            Reader rd = new BufferedReader(new InputStreamReader((conn.getInputStream())));
+            StringBuilder sb = new StringBuilder();
+            int cp;
+            while ((cp = rd.read()) != -1) {
+                sb.append((char) cp);
+            }
+            String data = sb.toString();
+            conn.disconnect();
+            return data;
+        } else if (conn.getResponseCode() == 403) {
+            throw new IOException("Failed : Security Exception");
+        } else {
+            throw new IOException("Failed : HTTP error code : " + conn.getResponseCode());
+        }
+
     }
 
 }
